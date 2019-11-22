@@ -1,0 +1,10 @@
+swiftmailer:
+    transport: smtp
+    auth_mode: login
+    port: 587
+    host: #ss10.ovh.net
+    username: #adresse mail
+    password: #mot de passe
+    #url: '%env(MAILER_URL)%' ?? besoin ??
+    spool: { type: "memory" }
+## checker https://openclassrooms.com/forum/sujet/symfony-4-swift-mailer-send-email pour la config
