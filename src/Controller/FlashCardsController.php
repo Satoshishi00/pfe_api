@@ -272,12 +272,10 @@ class FlashCardsController extends AbstractController
      */
     public function getRandomCardWithExcept($id_fc, Request $request): Response
     {
-        $liste = $request->request->get('exept_cards_array');
-        //return new JsonResponse(["toto" => $liste, 200);
-        $fc = $this->getDoctrine()->getRepository(FlashCards::class)->findBy(['id' => $id_fc])[0];
-        //dd($request->request->get('exept_cards_array'));
         
-
+        //Récupération de l'id de la flash card
+        $fc = $this->getDoctrine()->getRepository(FlashCards::class)->findBy(['id' => $id_fc])[0];
+        
         $json_fc[] = [
             'fc_id' => $fc->getId(),
             'fc_name' => $fc->getName(),
@@ -289,38 +287,64 @@ class FlashCardsController extends AbstractController
             'fc_id_creator' => $fc->getIdCreator()->getId(),
         ];
 
-        $exept_cards_array = $request->query->get('exept_cards_array');
+        // ---- 1 ----
+        //Récupération de la liste des cards de la fc
         $cards = $this->getDoctrine()->getRepository(Card::class)->findBy(['id_flash_cards' => $id_fc]);
         
-        //return new JsonResponse(['cards' => $exept_cards_array], 200);
-        
-        //take cards avalaible in set
+        // ---- 2 ----
+        //Récupération de la liste des id des cards de la fc
+        $cards_id = [];
         for($i=0; $i<count($cards); $i++){
-            for($j=0; $j<count($exept_cards_array); $j++){
-                $toto[] = $exept_cards_array;
-                if($cards[$i]->getId() == $exept_cards_array[$j]){
-                    $toto[] = $cards[$i]->getId().$exept_cards_array[$j];
-                    array_splice($cards, $i, 1);
+            $cards_id[] = $cards[$i]->getId();
+        }
+
+        // ---- 3 ----
+        //Récupération des id des cartes déjà faites
+        $liste = $request->request->get('result');
+        $cards_done = explode(",", $liste);
+        foreach($cards_done as $card_done) {
+            $list_tmp[] = intval($card_done);
+        }
+        $cards_done = $list_tmp;
+
+        // ---- 4 ----
+        //Récupération de la liste qui contient les cartes restantes, 
+        //c'est à dire la différence entre les cartes de la liste et les cartes faites
+        $cards_rest = array_diff($cards_id, $cards_done);
+        $tmp = [];
+        foreach($cards_rest as $item) {
+            $tmp[] = $item;
+        }
+        $cards_rest = $tmp;
+    
+        // ---- 5 ----
+        //S'il y a encore au moins une carte dans le paquet des id cartes restantes
+        if(count($cards_rest)>0){
+            //On choisi (l'id) d'une carte aléatoirement
+            $card_id = $cards_rest[rand(0,count($cards_rest)-1)];
+            foreach($cards as $c){
+                //On récupére les informations sur la carte du paquet qui nous intéresse
+                if ($c->getId() === $card_id){
+                    $card = $c;
+                    break;
                 }
             }
+        } else {
+            return new JsonResponse(["finish" => "Vous avez fini ce jeu de carte"], 200);
         }
-        $card = $cards[rand(0,count($cards)-1)];
-        //return new JsonResponse(['cards' => $toto], 200);
-
+        
+        // ---- 6 ----
+        //Affichage de la carte
         $json_fc[] = [
             "card_id" => $card->getId(),
             "card_recto" => $card->getRecto(),
+            "card_verso" => $card->getVerso(),
+            "cards_id" => $cards_id,
+            "cards_done" => $cards_done,
+            "cards_rest" => $cards_rest,
+            "remaining" => count($cards_rest),
         ];
 
-        //take last card
-        $last_card_id = $request->query->get('last_card_id');
-        $last_card = $this->getDoctrine()->getRepository(Card::class)->findBy(['id' => $last_card_id])[0];
-        
-        $json_fc[] = [
-            "last_card_id" => $last_card->getId(),
-            "last_card_verso" => $last_card->getVerso(),
-        ];
-        
         return new JsonResponse($json_fc, 200);
     }
 
