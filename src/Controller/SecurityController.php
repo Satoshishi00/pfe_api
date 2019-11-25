@@ -170,8 +170,8 @@ class SecurityController extends AbstractController
             "nb_flash_cards" => $user->getNbFlashCards(),
             "points" => $user->getPoints(),
             "premium" => $user->getPremium(),
-            "updated_at" => $user->getUpdatedAt(),
-            "created_at" => $user->getCreatedAt(),
+            "updated_at" => $user->getUpdatedAt()->format('H:i d/m/Y'),
+            "created_at" => $user->getCreatedAt()->format('d/m/Y'),
             "image" => $user->getImage()->getImageName(),
         ],
              201);

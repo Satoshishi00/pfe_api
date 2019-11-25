@@ -96,6 +96,7 @@ class QcmController extends AbstractController
             //Incrementation et recherche de la question suivante
             $i++;
             $current_question = $request->query->get('question'.$i);
+            $current_advice = $request->query->get('q'.$i.'_advice');
         }
 
 
