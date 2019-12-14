@@ -31,7 +31,7 @@ class Quizz
     /**
      * @ORM\Column(type="integer")
      */
-    private $nb_questions;
+    private $nb_questions = 0;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -41,7 +41,7 @@ class Quizz
     /**
      * @ORM\Column(type="integer")
      */
-    private $nb_done;
+    private $nb_done = 0;
 
     /**
      * @ORM\Column(type="datetime")
@@ -54,7 +54,7 @@ class Quizz
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\user", inversedBy="quizz")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="quizz")
      * @ORM\JoinColumn(nullable=false)
      */
     private $creator;
@@ -66,6 +66,8 @@ class Quizz
 
     public function __construct()
     {
+        $this->updated_at = new \DateTime("Europe/Paris");
+        $this->created_at = new \DateTime("Europe/Paris");
         $this->quizzQuestions = new ArrayCollection();
     }
 

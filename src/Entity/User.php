@@ -63,6 +63,11 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="integer")
      */
+    private $nb_quizz = 0;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $nb_flash_cards = 0;
 
     /**
@@ -224,6 +229,18 @@ class User implements UserInterface
     public function setNbQcm(int $nb_qcm): self
     {
         $this->nb_qcm = $nb_qcm;
+
+        return $this;
+    }
+
+    public function getNbQuizz(): ?int
+    {
+        return $this->nb_quizz;
+    }
+
+    public function setNbQuizz(int $nb_quizz): self
+    {
+        $this->nb_quizz = $nb_quizz;
 
         return $this;
     }

@@ -19,6 +19,21 @@ class QuizzRepository extends ServiceEntityRepository
         parent::__construct($registry, Quizz::class);
     }
 
+
+      // La première page est la page 1
+    public function findByLastsQuizzLimitPage($value = 50, $page = 1)
+    {
+        return $this->createQueryBuilder('q')
+            //->andWhere('q.exampleField = :val')
+            //->setParameter('val', $value)
+            ->orderBy('q.created_at', 'DESC')
+            ->setMaxResults($value)
+            ->setFirstResult(($page-1)*$value)
+            ->getQuery()
+            ->getResult();
+    }
+       
+
     // /**
     //  * @return Quizz[] Returns an array of Quizz objects
     //  */
