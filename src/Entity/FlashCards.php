@@ -69,6 +69,11 @@ class FlashCards
      */
     private $cards;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $nb_done;
+
 
        public function __construct()
     {
@@ -217,6 +222,18 @@ class FlashCards
                 $card->setIdFlashCards(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getNbDone(): ?int
+    {
+        return $this->nb_done;
+    }
+
+    public function setNbDone(int $nb_done): self
+    {
+        $this->nb_done = $nb_done;
 
         return $this;
     }

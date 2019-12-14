@@ -115,6 +115,11 @@ class User implements UserInterface
      */
     private $classrooms;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Quizz", mappedBy="creator")
+     */
+    private $quizz;
+
 
 
     public function __construct()
@@ -124,6 +129,7 @@ class User implements UserInterface
         $this->qcms = new ArrayCollection();
         $this->flashCards = new ArrayCollection();
         $this->classrooms = new ArrayCollection();
+        $this->quizz = new ArrayCollection();
     }
 
 
@@ -428,6 +434,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($classroom->getLeader() === $this) {
                 $classroom->setLeader(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quizz[]
+     */
+    public function getQuizz(): Collection
+    {
+        return $this->quizz;
+    }
+
+    public function addQuizz(Quizz $quizz): self
+    {
+        if (!$this->quizz->contains($quizz)) {
+            $this->quizz[] = $quizz;
+            $quizz->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuizz(Quizz $quizz): self
+    {
+        if ($this->quizz->contains($quizz)) {
+            $this->quizz->removeElement($quizz);
+            // set the owning side to null (unless already changed)
+            if ($quizz->getCreator() === $this) {
+                $quizz->setCreator(null);
             }
         }
 

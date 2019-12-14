@@ -404,4 +404,29 @@ class FlashCardsController extends AbstractController
         201);
     }
 
+    /**
+     * @Route ("/flashCards/{id_fc}/getInformationsAfterAnswering", name="flashCards/id_fc/getInformationsAfterAnswering")
+     * @return Response
+     */
+    public function getInformationsAfterAnswering($id_fc, Request $request)
+    {
+        //Incrémentation de 'nb_done' au jeu
+        $fc = $this->getDoctrine()->getRepository(FlashCards::class)->findBy(['id' => $id_fc])[0];
+        $fc->setNbDone($fc->getNbDone()+1);
+
+        //Ajouter n points à l'utilisateur
+        $nb_good_rep = $request->request->get('nb_good_rep');
+        $user_id = $request->request->get('user_id');
+        
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $user = $repository->findOneById($user_id);
+        $user->setPoints($user->getPoints()+$nb_good_rep);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        return new JsonResponse([
+            "ok" => "Informations de réponses ont été bien ajoutées.",
+        ],
+        201);
+    }
 }
