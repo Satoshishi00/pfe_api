@@ -138,6 +138,12 @@ class QuizzController extends AbstractController
      */
     public function show($id_quizz, $questions_ids): Response
     {
+        //Contrairement à un qcm, pour une quizz, je n'ai pas besoin de otutes le sinformations (listing des questions)
+        //Mais seulement d'une question et de la liste des réponses possibles
+        //Il me faut stocker la liste des questions auxquelles l'utilisateur a déjà répondu au sein d'un quizz
+        //Puis récupérer aléatoirement une question parmis les restantes
+        //Et à chaque soumission d'un réponse pa l'utilisateur, il me faut récupérer simultanément la réponse à la question en cours + la question suivante et les propositions qui lui sont associées.
+
         //Récupération des questions et réponses du quizz
         $questions = $this->getDoctrine()->getRepository(QuizzQuestion::class)->findBy(['quizz' => $id_quizz]);
 
