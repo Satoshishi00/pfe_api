@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -56,6 +58,16 @@ class Quizz
      * @ORM\JoinColumn(nullable=false)
      */
     private $creator;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\QuizzQuestion", mappedBy="quizz")
+     */
+    private $quizzQuestions;
+
+    public function __construct()
+    {
+        $this->quizzQuestions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -154,6 +166,37 @@ class Quizz
     public function setCreator(?user $creator): self
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|QuizzQuestion[]
+     */
+    public function getQuizzQuestions(): Collection
+    {
+        return $this->quizzQuestions;
+    }
+
+    public function addQuizzQuestion(QuizzQuestion $quizzQuestion): self
+    {
+        if (!$this->quizzQuestions->contains($quizzQuestion)) {
+            $this->quizzQuestions[] = $quizzQuestion;
+            $quizzQuestion->setQuizz($this);
+        }
+
+        return $this;
+    }
+
+    public function removeQuizzQuestion(QuizzQuestion $quizzQuestion): self
+    {
+        if ($this->quizzQuestions->contains($quizzQuestion)) {
+            $this->quizzQuestions->removeElement($quizzQuestion);
+            // set the owning side to null (unless already changed)
+            if ($quizzQuestion->getQuizz() === $this) {
+                $quizzQuestion->setQuizz(null);
+            }
+        }
 
         return $this;
     }
