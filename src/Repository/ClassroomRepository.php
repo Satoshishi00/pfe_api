@@ -19,6 +19,17 @@ class ClassroomRepository extends ServiceEntityRepository
         parent::__construct($registry, Classroom::class);
     }
 
+
+    public function findByClassesByUserId($leader_id)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.leader = :id')
+            ->setParameter('id', $leader_id)
+            ->orderBy('c.id', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Classroom[] Returns an array of Classroom objects
     //  */

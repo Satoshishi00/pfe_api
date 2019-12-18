@@ -30,9 +30,7 @@ class QcmController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->findOneById($id);
         
-        //dd("toto");
         $qcm_name = $request->query->get('qcm_name');
-        //dd($qcm_name);
         if (strlen($qcm_name) > 255){
             return new JsonResponse([
                 "error" => "La nom de qcm doit faire au maximum 255 caractères",
@@ -46,6 +44,12 @@ class QcmController extends AbstractController
             ],
             400);
         }
+
+        return new JsonResponse([
+            "message" => json_decode($request->getContent())->form->get('qcmName'),
+            "name" => $request->request->get("qcmName"),
+        ],
+        201);
 
         $user->setNbQcm($user->getNbQcm() + 1);
         $qcm->setName($qcm_name);

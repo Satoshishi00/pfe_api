@@ -52,6 +52,11 @@ class QuizzQuestion
      */
     private $right_answer;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $advice;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +142,18 @@ class QuizzQuestion
     public function setRightAnswer(int $right_answer): self
     {
         $this->right_answer = $right_answer;
+
+        return $this;
+    }
+
+    public function getAdvice(): ?string
+    {
+        return $this->advice;
+    }
+
+    public function setAdvice(?string $advice): self
+    {
+        $this->advice = $advice;
 
         return $this;
     }

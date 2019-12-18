@@ -21,28 +21,8 @@ class RequestListener
     public function onKernelRequest(RequestEvent $event)
     {
 
-        //die($event);
         if ($event->isMasterRequest()) {
-            /*$request = $event->getRequest();
-            $brainer_id = $request->request->get("brainer_id");
-            $brainer_pepper = $request->request->get("brainer_pepper");
-            //Récupération de l'utilisateur depuis l'id
-            $repository = $this->getDoctrine()->getRepository(User::class);
-            $user = $repository->findOneById($brainer_id);
-            //On compare les token 'pepper' (celui en cookie et celui associé de l'utilisateur)
-            if($user->getPepper() === $brainer_pepper) {
-                $response = new Response();
-                $message =  new JsonResponse(["logout" => "true"], 200);
-                $response->setContent($message);
-                $event->setResponse($response);
-                
-            }
-            $response = new Response();
-            $message =  new JsonResponse(["logout" => "true"], 200);
-            $response->setContent($message);
-            $event->setResponse($response);*/
 
-            return;
             $request = $event->getRequest();
             $security = $request->headers->get("security");
             //S'il n'y a pas besoin de sérutié on laisse la requete se propager
@@ -56,38 +36,20 @@ class RequestListener
                 $brainer_pepper = $request->headers->get("pepper");
                 $repository = $this->em->getRepository(User::class);
                 $user = $repository->findOneById($brainer_id);
-                $user = $user ? $user : "toto";
+                //Si l'utilisateur est existe (donc que l'id fourni correspond à un utilisateur)
+                //et que le pepper fourni est bien celui associé à l'utilisateur
+                //On fait confiance et on laisse la requête se propager
+                if ($user && $user->getPepper() === $brainer_pepper){
+                    return;
+                }
 
-
-                $response = new Response();
-                $message =  new JsonResponse(["id" => $brainer_id], 200);
+                //Autrement on annonce à l'utilisaeur qu'il n'est pas connecté
+                $response = new Response("");
+                $message =  new JsonResponse(["error" => "Vous ne semblez pas être connecté"], 500);
                 $response->setContent($message);
                 $event->setResponse($response);
             }
-            //Autrement, on redirige l'utilisateur vers la page de connexion
-          
-            
-
-            /*$brainer_id = $request->request->get("brainer_id");
-            //$brainer_pepper = $request->request->get("brainer_pepper");
-            //Récupération de l'utilisateur depuis l'id
-            $repository = $this->_em->getRepository(User::class);
-            $user = $repository->findOneById($brainer_id);
-            $response = new Response();
-            $message =  new JsonResponse(["logout" => "true"], 200);
-            $response->setContent($message);
-            $event->setResponse($response);*/
         }
-       /* $request = $event->getRequest();
-        $brainer_id = $request->request->get("brainer_id");
-        //$brainer_pepper = $request->request->get("brainer_pepper");
-        //Récupération de l'utilisateur depuis l'id
-        $repository = $this->_em->getRepository(User::class);
-        $user = $repository->findOneById($brainer_id);
-        $response = new Response();
-        $message =  new JsonResponse(["logout" => "true"], 200);
-        $response->setContent($message);
-        $event->setResponse($response);*/
         
     }
 }

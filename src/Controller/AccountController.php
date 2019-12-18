@@ -136,7 +136,6 @@ class AccountController extends AbstractController
             400);
         }
 
-
         $regex_password = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#&é\"'§è!çà°\-_*\$€ù%`£=+:;.,?<>])^[a-zA-Z\d@#&é\"'§è!çà°\-_*\$€ù%`£=+:;.,<>]{8,32}$";
         if(!preg_match('/^'.$regex_password.'$/', $new_password1)){
             return new JsonResponse([
@@ -178,12 +177,7 @@ class AccountController extends AbstractController
      */
     public function editEmail(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        //dd($request->headers->all(), $request->getMethod());
-        /*return new JsonResponse([
-            "error" => $request
-        ],400);*/
        
-
         $old_email = $request->query->get('old_email');
         $new_email1 = $request->query->get('new_email1');
         $new_email2 = $request->query->get('new_email2');
