@@ -57,7 +57,7 @@ class RegistrationController extends AbstractController
         $regex_password = "(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#&é\"'§è!çà°\-_*\$€ù%`£=+:;.,?<>])^[a-zA-Z\d@#&é\"'§è!çà°\-_*\$€ù%`£=+:;.,<>]{8,32}$";
         if(!preg_match('/^'.$regex_password.'$/', $plainPassword)){
             return new JsonResponse([
-            "error" => "Votre mot de passe est invalide. Il doit faire entre 8 et 32 charactères et contenir au moins une minuscule, une majuscule, un chiffre et un caractère spéciaux (@#é\"'§è!çà°_*\$€ù%`£=+:;.,?<>)"],
+            "error" => "Votre mot de passe est invalide. Il doit faire entre 8 et 32 charactères et contenir au moins une minuscule, une majuscule, un chiffre et un caractère spécial (@#é\"'§è!çà°_*\$€ù%`£=+:;.,?<>)"],
              400);
         }
 

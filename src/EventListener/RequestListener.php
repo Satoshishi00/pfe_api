@@ -40,6 +40,8 @@ class RequestListener
                 //et que le pepper fourni est bien celui associé à l'utilisateur
                 //On fait confiance et on laisse la requête se propager
                 if ($user && $user->getPepper() === $brainer_pepper){
+                    // $response = new Response("");
+                    // $response->setContent($user);
                     return;
                 }
 

@@ -59,14 +59,19 @@ class ClassroomController extends AbstractController
         $user = $repository->findOneById($id);
 
 
+        // $classrooms = $this->getDoctrine()->getRepository(Classroom::class)->findByClassesByUserId($user->getId());
         $classrooms = $this->getDoctrine()->getRepository(Classroom::class)->findByClassesByUserId($id);
 
+        $jsonResponse = [];
         foreach($classrooms as $classroom){
             $jsonResponse[] = [
                 "id" => $classroom->getId(),
                 "name" => $classroom->getName(),
             ];
         }
+        $jsonResponse = $jsonResponse ? $jsonResponse : $jsonResponse[] = [
+                "error" => "Vous ne faites partie d'aucune classe"
+            ];
 
         return new JsonResponse($jsonResponse,
              200);
