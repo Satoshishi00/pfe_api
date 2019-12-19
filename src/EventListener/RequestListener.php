@@ -31,7 +31,6 @@ class RequestListener
             } 
             //Autrement, on regarde les informations à l'intérieur du cookie
             else {
-                //Si l'id et le pepper de l'utilisateur correspondent bien, on laisse l'utilisateur récupérrer les informations de sa requête
                 $brainer_id = $request->headers->get("id");
                 $brainer_pepper = $request->headers->get("pepper");
                 $repository = $this->em->getRepository(User::class);
@@ -46,12 +45,12 @@ class RequestListener
                 }
 
                 //Autrement on annonce à l'utilisaeur qu'il n'est pas connecté
+                //On reste vague et non explicite car s'il est arrivé là c'est qu'il a modifié ses cookies
                 $response = new Response("");
-                $message =  new JsonResponse(["error" => "Vous ne semblez pas être connecté"], 500);
+                $message =  new JsonResponse(["error" => "Vous ne semblez pas être connecté"], 400);
                 $response->setContent($message);
                 $event->setResponse($response);
             }
         }
-        
     }
 }

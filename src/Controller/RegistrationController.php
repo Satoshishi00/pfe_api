@@ -121,7 +121,6 @@ class RegistrationController extends AbstractController
             "id" => $user->getId(),
             "email" => $user->getEmail(),
             "username" => $user->getUsername(),
-            "password" => $user->getPassword(),
             "nb_classes" => $user->getNbClasses(),
             "roles" => $user->getRoles(),
             "nb_qcm" => $user->getNbQcm(),

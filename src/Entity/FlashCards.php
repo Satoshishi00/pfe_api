@@ -72,7 +72,7 @@ class FlashCards
     /**
      * @ORM\Column(type="integer")
      */
-    private $nb_done;
+    private $nb_done = 0;
 
 
        public function __construct()

@@ -45,12 +45,6 @@ class QcmController extends AbstractController
             400);
         }
 
-        return new JsonResponse([
-            "message" => json_decode($request->getContent())->form->get('qcmName'),
-            "name" => $request->request->get("qcmName"),
-        ],
-        201);
-
         $user->setNbQcm($user->getNbQcm() + 1);
         $qcm->setName($qcm_name);
         $qcm->setDescription($qcm_description);
