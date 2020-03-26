@@ -87,8 +87,6 @@ class FlashCardsController extends AbstractController
         $entityManager->flush();
 
 
-        //dd($fc);
-
         $i = 1;
         //recto
         if ($recto_type == "media"){
@@ -102,8 +100,7 @@ class FlashCardsController extends AbstractController
         } else {
             $card_verso = $request->query->get('card_verso_'.$i);
         }
-        //dd($card_recto);
-        //dd($card_verso);
+        
         while (!is_null($card_recto) && !is_null($card_verso)){
             //dd('tata');
             $card = new Card();
@@ -134,7 +131,9 @@ class FlashCardsController extends AbstractController
                 $entityManager->flush();
 
                 //Change of image name
-                rename("/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$card_recto->getClientOriginalName(), "/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$media_name);
+                // rename("/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$card_recto->getClientOriginalName(), "/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$media_name);
+                rename("/var/www/brainer_api/public/medias/images".$card_recto->getClientOriginalName(), "/var/www/brainer_api/public/medias/images/".$media_name);
+
                 //dd($media);
             } else {
                 //text
@@ -146,7 +145,7 @@ class FlashCardsController extends AbstractController
             //increase in the number of cards
             $fc->setNbCards($fc->getNbCards()+1);
 
-            //add points to user (10points for 1 question)
+            //add points to user 
             $user->setPoints($user->getPoints() + 5);
             
             //verso
@@ -172,12 +171,12 @@ class FlashCardsController extends AbstractController
                 $entityManager->flush();
 
                 //Change of image name
-                rename("/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$card_verso->getClientOriginalName(), "/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$media_name);
+                // rename("/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$card_verso->getClientOriginalName(), "/Applications/MAMP/htdocs/pfe/api/public/medias/images/".$media_name);
+                rename("/var/www/brainer_api/public/medias/images".$card_verso->getClientOriginalName(), "/var/www/brainer_api/public/medias/images/".$media_name);
             } else {
                 //text
                 $card->setVerso($card_verso);
                 $entityManager->flush();
-                //dd($card);
             }
             
             
